@@ -6,8 +6,10 @@ The goal: Learning and finding relationships in the data (finding correlation be
 
 Folder Script1
   - Python scripts using FBprophet to predict BTC Prices
+
 Folder Script2 
   - Python scripts using AutoTS to predict BTC Prices
+
 Folder Script3
   - Python scripts using Linear Regression to predict BTC Prices
 
