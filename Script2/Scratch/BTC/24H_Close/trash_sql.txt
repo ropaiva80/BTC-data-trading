@@ -1,0 +1,140 @@
+
+
+C:\Python\Crypto\Outlook_365_Key
+
+
+#####################################3
+
+
+###(EXCELLENT)###
+
+############################################################################################################################
+### Send Report - BTC 1H - Predict
+############################################################################################################################
+
+########################################################################################################
+# https://pypi.org/project/pretty-html-table/
+# 	=> pip install pretty_html_table
+# https://pypi.org/project/O365/
+# 	=> pip install o365
+# 	=> pip install sphinx==2.2.2
+# https://o365.github.io/python-o365/latest/api/account.html
+# https://github.com/ykorzikowski/python-fritz-office-365-sync/blob/6810fa3d9cd1b1e780e443586f39b758f4a06882/python-fritz-office-365-sync/core.py#L12
+# https://github.com/O365/python-o365/issues/167
+# https://www.datacamp.com/tutorial/for-loops-in-python (excellent)
+
+########################################################################################################
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import yfinance as yf
+from seaborn import regression
+sns.set()
+plt.style.use('seaborn-whitegrid')
+from datetime import datetime
+from datetime import timedelta
+import warnings
+import pyodbc
+
+### Database connection - Microsoft SQL Server ###
+
+#new - database connection #
+server = 'tcp:127.0.0.1'
+database = 'Cryptopredict_script2'
+username = 'script2'
+password = 'C4nd4r0l*'
+cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+cursor = cnxn.cursor()
+
+
+#################### Select information block by datetime ####################
+
+# YAHOO Format #
+#Datetime function to range of select
+
+init_time_now = datetime.now()
+datetime1 = init_time_now - timedelta(days = 1)
+datetime1 = datetime1.strftime('%Y-%m-%d')
+datetime2 = init_time_now + timedelta(days = 6)
+datetime2 = datetime2.strftime('%Y-%m-%d')
+
+
+#################### Feeding both Dataframe from SQL's Tables ####################
+
+df0 = pd.read_sql_query('SELECT * FROM BITCOIN_v1_COINBASE', cnxn)
+
+df1 = pd.read_sql_query('SELECT * FROM BITCOIN_v2_YAHOOFINANCE', cnxn)
+
+
+##############################################################################################
+# 1* First - applying rules in both dataframe at the same time to filter data by datetime range
+# My first for loop in python! ;-) Praise Lord!
+##############################################################################################
+
+df_list0 = [df0]
+df_list1 = [df1]
+
+for i in df_list0:
+    mask = (i['DATETIME_PREDICTION'] >= datetime1) & (i['DATETIME_PREDICTION'] <= datetime2)
+    i.loc[mask]
+    grouped_prediction0 = i.loc[mask]
+
+for i in df_list1:
+    mask = (i['DATETIME_PREDICTION'] >= datetime1) & (i['DATETIME_PREDICTION'] <= datetime2)
+    i.loc[mask]
+    grouped_prediction1 = i.loc[mask]
+
+grouped_prediction = pd.concat([grouped_prediction0, grouped_prediction1], join='inner')
+
+grouped_prediction = grouped_prediction[grouped_prediction["CATEGORY"].str.contains("Hourly") == False]
+
+
+##############################################################################
+# 2* (second) way to do the same thing like above
+##############################################################################
+
+### mask = (df0['DATETIME_PREDICTION'] >= datetime1) & (df0['DATETIME_PREDICTION'] <= datetime2)
+### df0.loc[mask]
+### grouped_prediction0 = df0.loc[mask]
+
+### grouped_prediction0 = grouped_prediction0[grouped_prediction0["CATEGORY"].str.contains("Hourly") == False]
+
+### mask = (df1['DATETIME_PREDICTION'] >= datetime1) & (df1['DATETIME_PREDICTION'] <= datetime2)
+### df1.loc[mask]
+### grouped_prediction1 = df1.loc[mask]
+
+### grouped_prediction = pd.concat([grouped_prediction0, grouped_prediction1], join='inner')
+
+#############################################################################
+
+
+
+for i in df_list:
+    mask = (i['DATETIME_PREDICTION'] >= datetime1) & (i['DATETIME_PREDICTION'] <= datetime2)
+    i.loc[mask]
+    grouped_prediction0 = i.loc[mask]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+for i in df_list1:
+    mask = (i['DATETIME_PREDICTION'] >= datetime1) & (i['DATETIME_PREDICTION'] <= datetime2)
+    i.loc[mask]
+    grouped_prediction1 = i.loc[mask]
+
+grouped_prediction = pd.concat([grouped_prediction0, grouped_prediction1], join='inner')
+
+grouped_prediction = grouped_prediction[grouped_prediction["CATEGORY"].str.contains("Hourly") == False]
